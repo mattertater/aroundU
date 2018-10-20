@@ -3,10 +3,12 @@ import { Root } from 'native-base';
 import AuthLoadingScreen from './components/Auth.js';
 import MapScreen from './screens/Map.js'
 import SignInScreen from './screens/SignIn.js';
+import CreateAccountScreen from './screens/CreateAccount.js';
 import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 
 const SignUpStack = createStackNavigator({  // Sign up
   SignIn: SignInScreen,
+  CreateAccount: CreateAccountScreen,
 });
 
 
