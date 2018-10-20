@@ -28,7 +28,7 @@ class SignInScreen extends React.Component {
           password: '',
           success: '',
           showToast: false,
-          isFontReady:true,
+          isFontReady:false,
         };
       }
 

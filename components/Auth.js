@@ -11,11 +11,11 @@ class AuthLoadingScreen extends React.Component {
 
     constructor() {
       super();
-      this._bootstrapAsync();
       this.state = {
         loading: '',
         success: '',
         error: '',
+        isFontReady: false,
       }
     }
     static navigationOptions = {
@@ -23,10 +23,20 @@ class AuthLoadingScreen extends React.Component {
         headerMode: 'none',
     };
 
-    _bootstrapAsync = async () => {
-      const userToken = await AsyncStorage.getItem('userToken');
-      this.props.navigation.navigate(userToken ? 'Map' : 'SignUp');
-    };
+    async componentWillMount() {
+      try {
+        Expo.Font.loadAsync({
+          'Roboto': require('../node_modules/native-base/Fonts/Roboto.ttf'),
+          'Roboto_medium': require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
+      }).then(async (response) => {
+          const userToken = await AsyncStorage.getItem('userToken');
+          this.props.navigation.navigate(userToken ? 'Map' : 'SignUp');
+        })
+      } catch (error) {
+        console.log('error loading icon fonts', error);
+      }
+    }
+    
   
     render() {
       return (
