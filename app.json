@@ -9,6 +9,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "androidStatusBarColor": "#334393",
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#334393"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
