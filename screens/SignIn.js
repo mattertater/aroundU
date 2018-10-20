@@ -15,6 +15,7 @@ import { Form, Label, Input, Item, Container, Content, Body, StyleProvider,  But
 import Common from '../native-base-theme/variables/commonColor';
 import getTheme from '../native-base-theme/components';
 // import firebase from '../config/Firebase.js'
+import colors from '../config/Colors.js'
 
 class SignInScreen extends React.Component {
 
@@ -68,23 +69,74 @@ class SignInScreen extends React.Component {
     render(){
         if (!this.state.isFontReady) {
             return <Expo.AppLoading />;
-          }
+          } 
         return(
-            <StyleProvider style={getTheme(Common)}>
-                <Container>
+            <Container>
                 <StatusBar barStyle="light-content" />
-                <TouchableOpacity onPress={() => {this.props.navigation.navigate('Map')}}>
-                    <View style={{width: 75, height: 75, borderRadius: 75/2.0, backgroundColor: 'blue'}}>
-                    </View>
-                </TouchableOpacity>
-                </Container>
-            </StyleProvider>
-        )
+                <View style={styles.container}>
+                    
+                    <Item style={styles.loginLogo}>
+                        <Text>Logo</Text>
+                    </Item>
+
+                    <Item floatingLabel last style={styles.loginTextBox}>
+                        <Label style={styles.loginText}>Username</Label>
+                        <Input style={styles.loginText}/>
+                    </Item>
+                    
+                    <Item floatingLabel last style={styles.loginTextBox}>
+                        <Label style={styles.loginText}>Password</Label>
+                        <Input style={styles.loginText} secureTextEntry={true} />
+                    </Item>
+
+                    <Item>
+                        <Button rounded style={styles.loginButton}>
+                            <Text style={styles.loginButtonText}>Log In</Text>
+                        </Button>
+                    </Item>
+
+                    <Item>
+                        <TouchableOpacity onPress={() => {this.props.navigation.navigate('Map')}}>
+                            <Button rounded style={styles.loginButton}>
+                                <Text style={styles.loginButtonText}>Map</Text>
+                            </Button>
+                        </TouchableOpacity>
+                    </Item>
+                </View>
+            </Container>
+        );
     }
 }
-
-const styles = StyleSheet.create({
-
+  const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: colors.blue,
+        borderBottomWidth: 0,
+    },
+    loginLogo: {
+        maxWidth: 175,
+        minWidth: 100,
+    },
+    loginButton: {
+        marginTop: 20,
+        minWidth: 150,
+        justifyContent: 'center',
+        backgroundColor: colors.green,
+        borderBottomWidth: 0,
+    },
+    loginButtonText: {
+        color: 'white',
+    },
+    loginTextBox: {
+        minWidth: 250,
+        marginTop: 20,
+    },
+    loginText: {
+        color: 'white',
+    }
   });
 
   export default SignInScreen;
