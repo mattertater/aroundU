@@ -4,11 +4,12 @@ import AuthLoadingScreen from './components/Auth.js';
 
 import SignInScreen from './screens/SignIn.js';
 import MyMap from "./screens/Map/index.js";
-
 import { createStackNavigator, createSwitchNavigator, createDrawerNavigator } from 'react-navigation';
+
 
 const SignUpStack = createStackNavigator({  // Sign up
   SignIn: SignInScreen,
+  CreateAccount: CreateAccountScreen,
 });
 
 
