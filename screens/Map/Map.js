@@ -11,12 +11,14 @@ import {
     TouchableOpacity,
     Modal,
     ScrollView,
+    Text,
 } from 'react-native';
+import Expo from 'expo'
 import { Ionicons } from '@expo/vector-icons';
-import getTheme from '../native-base-theme/components';
-import Common from '../native-base-theme/variables/commonColor';
+import getTheme from '../../native-base-theme/components';
+import Common from '../../native-base-theme/variables/commonColor';
 import {MapView, Permissions, Location} from 'expo';
-import { Container, StyleProvider, } from 'native-base';
+import { Container, StyleProvider, Header, Left, Button, Icon, Body, Title, Content, } from 'native-base';
 
 
 
@@ -58,21 +60,52 @@ class MapScreen extends React.Component {
     };
 
     render() {
-        if(this.state.loading){
-            return(<View><ActivityIndicator/></View>);
-        }
         return (
-            <MapView
-                style={styles.map}
-                initialRegion={this.state.region}
-                onRegionChange={() => this._handleMapRegionChange.bind(this)}
-            >
-            </MapView>
+            <Container>
+                <Header androidStatusBarColor="rgba(0,0,0,0.251)" style={{marginTop: Expo.Constants.statusBarHeight, elevation: 0}}>
+                    <Left>
+                        <Button transparent onPress={() => this.props.navigation.toggleDrawer()}>
+                            <Icon name='menu'/>
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title>aroundU</Title>
+                    </Body>
+                </Header>
+                <View style={styles.container}>
+                    {this.state.loading ? (
+                        <Loading />
+                    ) : (
+                        <MapView
+                            style={styles.map}
+                            initialRegion={this.state.region}
+                            onRegionChange={() => this._handleMapRegionChange.bind(this)}
+                            >
+                        </MapView>
+                    )}
+                </View>
+                
+                    
+                
+                
+            </Container>
         );
     }
 }
 
+
+const Loading = () => (
+    <View style={styles.container}>
+      <Text>Loading...</Text>
+    </View>
+  );
+
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     map: {
         position: 'absolute',
         top: 0,
