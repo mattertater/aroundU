@@ -1,21 +1,30 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Root } from 'native-base';
+import AuthLoadingScreen from './components/Auth.js';
+import MapScreen from './screens/Map.js'
+import SignInScreen from './screens/SignIn.js';
+import { createStackNavigator, createSwitchNavigator } from 'react-navigation';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const SignUpStack = createStackNavigator({  // Sign up
+  SignIn: SignInScreen,
 });
+
+
+const Switch = createSwitchNavigator({    // Switch between the two
+  AuthLoading: AuthLoadingScreen, 
+  SignUp: SignUpStack,
+  Map: MapScreen,
+}, 
+
+{
+  initialRouteName: 'AuthLoading' 
+});
+
+
+
+
+export default () => (
+  <Root>
+    <Switch/>
+  </Root>
+)
