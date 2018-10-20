@@ -27,8 +27,8 @@ class MapScreen extends React.Component {
         this.state = {
             loading: true,
             region: {
-                latitude: 0,
-                longitude: 0,
+                latitude: null,
+                longitude: null,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             }
@@ -48,7 +48,7 @@ class MapScreen extends React.Component {
 
         let location = await Location.getCurrentPositionAsync({});
         console.log(JSON.stringify(location))
-        this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 } });
+        this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 }, loading: false });
     };
 
     
@@ -58,7 +58,9 @@ class MapScreen extends React.Component {
     };
 
     render() {
-        
+        if(this.state.loading){
+            return(<View><ActivityIndicator/></View>);
+        }
         return (
             <MapView
                 style={styles.map}
