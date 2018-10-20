@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Content, Text, List, ListItem } from "native-base";
+import { Container, Content, Text, List, ListItem, Item, Button, Icon,} from "native-base";
 const routes = ["MyEvents", "EventsAttending", "Profile", "Friends"];
 export default class SideBar extends React.Component {
 
@@ -20,6 +20,11 @@ export default class SideBar extends React.Component {
             }}
           />
         </Content>
+        <Item style={{position: 'absolute', left: 10, bottom: 10, borderColor: 'transparent'}}>
+          <Button transparent onPress={() => this.props.navigation.navigate('Settings')}>
+            <Icon  style={{ color: 'black' }} name='settings'/>
+          </Button>
+        </Item>          
       </Container>
     );
   }

@@ -5,6 +5,7 @@ import EventsAttending from "../EventsAttending/EventsAttending.js";
 import Profile from "../Profile/Profile.js";
 import Friends from "../Friends/Friends.js";
 import SideBar from "../SideBar/SideBar.js";
+import Settings from "../Settings/Settings.js";
 
 import { createDrawerNavigator } from 'react-navigation';
 
@@ -14,10 +15,13 @@ const HomeScreenRouter = createDrawerNavigator(
       MyEvents: { screen: MyEvents },
       EventsAttending: { screen: EventsAttending },
       Profile: { screen: Profile },
-      Friends: { screen: Friends },
+      Friends: { screen: Friends }, 
+      Settings:  { screen: Settings }, 
     },
     {
-        contentComponent: props => <SideBar {...props} />
+        intialRouteName: Map,
+        contentComponent: props => <SideBar {...props} />,
+        backBehavior: "initialRoute",
     }
   );
   export default HomeScreenRouter;

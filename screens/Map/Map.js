@@ -84,10 +84,6 @@ class MapScreen extends React.Component {
                         </MapView>
                     )}
                 </View>
-                
-                    
-                
-                
             </Container>
         );
     }
