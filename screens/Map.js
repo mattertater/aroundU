@@ -35,30 +35,30 @@ class MapScreen extends React.Component {
         };
     }
 
-    componentDidMount(){
-        console.log('component DID mount playa!');
-        // this.setCurrentPosition();
-    }
+    // componentDidMount(){
+    //     console.log('component DID mount playa!');
+    //     // this.setCurrentPosition();
+    // }
 
 
-    setCurrentPosition(){
-        console.log('yo we in this function b');
-        navigator.geolocation.getCurrentPosition((position) => {
-            this.setState({
-                ...this.state,
-                loading: false, 
-                region: {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
-                },
-            })
-        },
-        (error) => this.setState({ ...this.state, error: error.message }),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-      );
-    };
+    // setCurrentPosition(){
+    //     console.log('yo we in this function b');
+    //     navigator.geolocation.getCurrentPosition((position) => {
+    //         this.setState({
+    //             ...this.state,
+    //             loading: false, 
+    //             region: {
+    //                 latitude: position.coords.latitude,
+    //                 longitude: position.coords.longitude,
+    //                 latitudeDelta: 0.0922,
+    //                 longitudeDelta: 0.0421
+    //             },
+    //         })
+    //     },
+    //     (error) => this.setState({ ...this.state, error: error.message }),
+    //     { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    //   );
+    // };
     
 
     _handleMapRegionChange = region => {
@@ -70,7 +70,6 @@ class MapScreen extends React.Component {
         return (
             <View>
                 <MapView
-                    style={styles.map}
                     initialRegion={{
                         latitude: 37.78825,
                         longitude: -122.4324,
