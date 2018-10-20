@@ -14,7 +14,7 @@ import AuthLoadingScreen from '../components/Auth.js';
 import { Form, Label, Input, Item, Container, Content, Body, StyleProvider,  Button, Toast } from 'native-base';
 import Common from '../native-base-theme/variables/commonColor';
 import getTheme from '../native-base-theme/components';
-// import firebase from '../config/Firebase.js'
+import firebase from '../config/Firebase.js'
 import colors from '../config/Colors.js'
 
 class SignInScreen extends React.Component {
@@ -45,26 +45,26 @@ class SignInScreen extends React.Component {
         this.setState({isFontReady:true})
       }
 
-    // _signInAsync = async () => {
-    // const { email, password } = this.state;
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //                 .then(() => { AsyncStorage.setItem('userToken', 'success');
-    //                                 this.props.navigation.navigate('AuthLoading'); 
-    //                             })
-    //                 .catch(() => {
-    //                     <AuthLoadingScreen error='Authentication failed' loading={false} success=''/>
-    //                     Toast.show({
-    //                         style: {
-    //                             backgroundColor: "#6D6ABF",
-    //                             borderRadius: 15,
-    //                         },
-    //                         text: "Email or password is inccorect. Try again.",
-    //                         buttonText: "Got it",
-    //                         duration: 3000,
-    //                         position: 'bottom',
-    //                     })
-    //                     });
-    // };
+    _signInAsync = async () => {
+    const { email, password } = this.state;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+                    .then(() => { AsyncStorage.setItem('userToken', 'success');
+                                    this.props.navigation.navigate('AuthLoading'); 
+                                })
+                    .catch(() => {
+                        <AuthLoadingScreen error='Authentication failed' loading={false} success=''/>
+                        Toast.show({
+                            style: {
+                                backgroundColor: "#000000",
+                                borderRadius: 15,
+                            },
+                            text: "Email or password is inccorect. Try again.",
+                            buttonText: "Got it",
+                            duration: 3000,
+                            position: 'bottom',
+                        })
+                        });
+    };
 
     render(){
         if (!this.state.isFontReady) {
@@ -81,16 +81,16 @@ class SignInScreen extends React.Component {
 
                     <Item floatingLabel last style={styles.loginTextBox}>
                         <Label style={styles.loginText}>Username</Label>
-                        <Input style={styles.loginText}/>
+                        <Input style={styles.loginText} value={this.state.email} onChangeText={email => this.setState({email})}/>
                     </Item>
                     
                     <Item floatingLabel last style={styles.loginTextBox}>
                         <Label style={styles.loginText}>Password</Label>
-                        <Input style={styles.loginText} secureTextEntry={true} />
+                        <Input style={styles.loginText} secureTextEntry={true} value={this.state.password} onChangeText={password => this.setState({password})} />
                     </Item>
 
                     <Item>
-                        <Button rounded style={styles.loginButton}>
+                        <Button rounded style={styles.loginButton} onPress={this._signInAsync.bind(this)} >
                             <Text style={styles.loginButtonText}>Log In</Text>
                         </Button>
                     </Item>
