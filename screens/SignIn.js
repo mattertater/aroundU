@@ -6,12 +6,12 @@ import {
     Dimensions,
     TouchableOpacity,
     StyleSheet,
-    AsyncStorage,
     Text,
+    AsyncStorage,
 } from 'react-native';
 
 import AuthLoadingScreen from '../components/Auth.js';
-import { Form, Label, Input, Item, Container, Content, Body, StyleProvider,  Button, Toast } from 'native-base';
+import { Form, Label, Input, Item, Container, Content, Body, StyleProvider, Button, Toast } from 'native-base';
 import Common from '../native-base-theme/variables/commonColor';
 import getTheme from '../native-base-theme/components';
 // import firebase from '../config/Firebase.js'
@@ -36,7 +36,7 @@ class SignInScreen extends React.Component {
         header: null,
         headerMode: 'none',
     };
-    
+
     componentDidMount() {
         Expo.Font.loadAsync({
             'Roboto': require('../node_modules/native-base/Fonts/Roboto.ttf'),
@@ -75,32 +75,28 @@ class SignInScreen extends React.Component {
                 <StatusBar barStyle="light-content" />
                 <View style={styles.container}>
                     
-                    <Item style={styles.loginLogo}>
-                        <Text>Logo</Text>
+                    <Item style={styles.noUnderline}>
+                        <Image source={require('../assets/images/logo.png')} style={styles.loginLogo}></Image>
                     </Item>
 
-                    <Item floatingLabel last style={styles.loginTextBox}>
-                        <Label style={styles.loginText}>Username</Label>
-                        <Input style={styles.loginText}/>
+                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
+                        <Input style={styles.loginText} placeholder='Email' placeholderTextColor='white'/>
                     </Item>
                     
-                    <Item floatingLabel last style={styles.loginTextBox}>
-                        <Label style={styles.loginText}>Password</Label>
-                        <Input style={styles.loginText} secureTextEntry={true} />
+                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
+                        <Input style={styles.loginText} placeholder='Password' placeholderTextColor='white' secureTextEntry={true} />
                     </Item>
 
-                    <Item>
+                    <Item style={styles.noUnderline}>
                         <Button rounded style={styles.loginButton}>
                             <Text style={styles.loginButtonText}>Log In</Text>
                         </Button>
                     </Item>
 
-                    <Item>
-                        <TouchableOpacity onPress={() => {this.props.navigation.navigate('Map')}}>
-                            <Button rounded style={styles.loginButton}>
-                                <Text style={styles.loginButtonText}>Map</Text>
-                            </Button>
-                        </TouchableOpacity>
+                    <Item style={styles.noUnderline}>
+                        <Button onPress={() => {this.props.navigation.navigate('CreateAccount')}} rounded style={styles.loginButton}>
+                            <Text style={styles.loginButtonText}>Create Account</Text>
+                        </Button>
                     </Item>
                 </View>
             </Container>
@@ -108,35 +104,39 @@ class SignInScreen extends React.Component {
     }
 }
   const styles = StyleSheet.create({
+    noUnderline: {
+        borderColor: 'transparent',
+    },
     container: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: 100,
         backgroundColor: colors.blue,
         borderBottomWidth: 0,
     },
     loginLogo: {
-        maxWidth: 175,
-        minWidth: 100,
+        width: 250,
+        height: 250,
     },
     loginButton: {
         marginTop: 20,
-        minWidth: 150,
+        width: 150,
         justifyContent: 'center',
-        backgroundColor: colors.green,
-        borderBottomWidth: 0,
+        backgroundColor: colors.yellow,
+        borderColor: 'transparent',
     },
     loginButtonText: {
-        color: 'white',
+        color: colors.black,
     },
     loginTextBox: {
         minWidth: 250,
-        marginTop: 20,
     },
     loginText: {
-        color: 'white',
+        color: colors.white,
     }
   });
+
+
 
   export default SignInScreen;
