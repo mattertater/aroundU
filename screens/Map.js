@@ -15,7 +15,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import getTheme from '../native-base-theme/components';
 import Common from '../native-base-theme/variables/commonColor';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import {MapView, Permissions, Location} from 'expo';
 import { Container, StyleProvider, } from 'native-base';
 
 
@@ -29,36 +29,28 @@ class MapScreen extends React.Component {
             region: {
                 latitude: null,
                 longitude: null,
-                latitudeDelta: null,
-                longitudeDelta: null,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421
             }
         };
     }
 
-    componentDidMount(){
-        console.log('component DID mount playa!');
-        // this.setCurrentPosition();
+   
+    componentDidMount() {
+        this._getLocationAsync();
     }
 
+    _getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            alert('permission not granted');
+        }
 
-    setCurrentPosition(){
-        console.log('yo we in this function b');
-        navigator.geolocation.getCurrentPosition((position) => {
-            this.setState({
-                ...this.state,
-                loading: false, 
-                region: {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421
-                },
-            })
-        },
-        (error) => this.setState({ ...this.state, error: error.message }),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-      );
+        let location = await Location.getCurrentPositionAsync({});
+        console.log(JSON.stringify(location))
+        this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 }, loading: false });
     };
+
     
 
     _handleMapRegionChange = region => {
@@ -66,21 +58,16 @@ class MapScreen extends React.Component {
     };
 
     render() {
-        
+        if(this.state.loading){
+            return(<View><ActivityIndicator/></View>);
+        }
         return (
-            <View>
-                <MapView
-                    style={styles.map}
-                    initialRegion={{
-                        latitude: 37.78825,
-                        longitude: -122.4324,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421,
-                        }}
-                    onRegionChange={() => this._handleMapRegionChange.bind(this)}
-                >
-                </MapView>
-            </View>
+            <MapView
+                style={styles.map}
+                initialRegion={this.state.region}
+                onRegionChange={() => this._handleMapRegionChange.bind(this)}
+            >
+            </MapView>
         );
     }
 }
