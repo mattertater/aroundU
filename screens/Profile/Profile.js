@@ -46,11 +46,6 @@ class Profile extends React.Component {
         return(
             <Container>
                 <View style={styles.container}>
-                    
-                    <Button transparent style={styles.backButton} onPress={() => this.props.navigation.goBack(null)}>
-                        <Icon type='MaterialIcons' name='arrow-back' style={{ color: colors.white }}/>
-                    </Button>
-
                     <Item style={styles.noUnderline}>
                     { this.state.userFound ? (
                         <Text style={styles.profileNameText}>Name: {user.firstName} {user.lastName}</Text>
@@ -69,11 +64,11 @@ class Profile extends React.Component {
                     </Item>
 
                     <Item style={styles.noUnderline}>
-                        <Text>Email: {email}</Text>
+                        <Text style={{color: colors.white, fontSize: 15, paddingTop: 20}}>Email: {email}</Text>
                     </Item>
 
                     <Button transparent style={styles.mapMenu} onPress={() => this.props.navigation.toggleDrawer()}>
-                        <Icon name='menu' style={{ width: 20, height: 20, color: colors.darkBlue }}/>
+                        <Icon name='menu' style={{ width: 20, height: 20, color: colors.white }}/>
                     </Button>
                 </View>
             </Container>
@@ -86,23 +81,22 @@ class Profile extends React.Component {
         flexDirection: 'column',
         alignItems: 'center',
         paddingTop: 50,
+        backgroundColor: colors.blue,
+        borderBottomWidth: 0,
     },
     noUnderline: {
         borderColor: 'transparent',
     },
-    navHeader: {
-        elevation: 0,
-        marginTop: Expo.Constants.statusBarHeight,
-        backgroundColor: colors.blue,
-    },
     profileNameText: {
-        width: 400,
+        color: colors.white,
+        width: 150,
         fontSize: 30,
+        paddingBottom: 15,
     },
     mapMenu: {
         position: 'absolute',
-        left: 15,
-        top: 15,
+        left: 10,
+        top: 10,
     },
   });
 

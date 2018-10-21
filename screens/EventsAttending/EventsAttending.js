@@ -4,6 +4,8 @@ import {
     Text,
     StyleSheet,
 } from 'react-native';
+import {Icon, Button, Item} from 'native-base';
+import colors from '../../config/Colors.js';
 
 
 class EventsAttending extends React.Component {
@@ -17,16 +19,33 @@ class EventsAttending extends React.Component {
    
     render(){
         return(
-            <View style={styles.temp}><Text>EventsAttending Screen</Text></View>
+            <View style={styles.container}>
+                <Item style={styles.noUnderline}>
+                    <Text style={{fontSize: 30, color: colors.white}}>Events I'm Attending</Text>
+                </Item>
+                <Button transparent style={styles.mapMenu} onPress={() => this.props.navigation.toggleDrawer()}>
+                    <Icon name='menu' style={{ width: 20, height: 20, color: colors.white }}/>
+                </Button>
+            </View>
         );
     }
 }
   const styles = StyleSheet.create({
-    temp: {
+    container: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: 50,
+        backgroundColor: colors.blue,
+        borderBottomWidth: 0,
+    },
+    noUnderline: {
+        borderColor: 'transparent',
+    },
+    mapMenu: {
+        position: 'absolute',
+        left: 10,
+        top: 10,
     },
   });
 

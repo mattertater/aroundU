@@ -71,7 +71,7 @@ class MapScreen extends React.Component {
                         onRegionChange={() => this._handleMapRegionChange.bind(this)}
                         mapPadding={{top: 0, left: Dimensions.get('window').width - 50, right: 0, bottom: 0}}
                         />
-                    <Fab style={{ backgroundColor: colors.yellow }} position="bottomRight" onPress={() => this.props.navigation.navigate('NewEvent')}>
+                    <Fab style={{ backgroundColor: colors.orange }} position="bottomRight" onPress={() => this.props.navigation.navigate('NewEvent')}>
                         <Icon name="add" />
                     </Fab>
                 </View>
