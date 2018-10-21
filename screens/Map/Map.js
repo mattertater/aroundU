@@ -159,5 +159,4 @@ const styles = StyleSheet.create({
         borderColor: 'transparent',
     }
 });
-
 export default MapScreen;
