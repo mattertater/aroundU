@@ -8,6 +8,10 @@ import {
 import { Container, Header, Content, Item, Label, Icon, DatePicker, Input, Left, Button, Body, Title, Footer} from 'native-base';
 import colors from '../../config/Colors';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import firebase from '../../config/Firebase'
+
+let user;
 
 class NewEvent extends React.Component {
 
@@ -21,10 +25,18 @@ class NewEvent extends React.Component {
             chosenStartTime: new Date(),
             chosenEndDate:new Date(),
             chosenEndTime: new Date(),
+            location: {
+                lat: 0,
+                lng: 0,
+            },
+            locationName: '',
             isDateTimePickerVisible: false,
         };
       }
 
+      componentWillMount(){
+          user=firebase.auth().currentUser;
+      };
     _showDateTimePicker = () => this.setState({ isDateTimePickerVisible: true });
 
     _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
@@ -41,21 +53,30 @@ class NewEvent extends React.Component {
 
     _submitToFirebase = () => {
         console.log('submitting to firebase');
-        const {title, organization, description, chosenStartDate, chosenStartTime, chosenEndDate, chosenEndTime} = this.state; 
+        const {title, organization, description, chosenStartDate, chosenStartTime, chosenEndDate, chosenEndTime, location, locationName} = this.state; 
         startTime = chosenStartDate.setHours(chosenStartTime.getHours());
         startTime = chosenStartDate.setMinutes(chosenStartTime.getMinutes());
         startTime = new Date(startTime);
         endTime = chosenEndDate.setHours(chosenEndTime.getHours());
         endTime = chosenEndDate.setMinutes(chosenEndTime.getMinutes());
         endTime = new Date(endTime);
-        var event = {
+        firebase.database().ref('Events/').push({
             title: title,
             organization: organization, 
             description: description,
-            startTime: startTime,
-            endTime: endTime,
-            submissionTimestamp: new Date(),
-        }
+            startTime: startTime.toString(),
+            endTime: endTime.toString(),
+            location: {lat: location.lat, lng: location.lng},
+            locationName: locationName,
+            submissionBy: user.providerData[0].email,
+            submissionTimestamp: Date.now(),
+        }).then((data)=>{
+            this.props.navigation.navigate('Map');
+            alert('Event created successfully!');
+            
+        }).catch( error=>{
+            console.log('failed to create the event: ' + error.message);
+        })
     }
 
     render(){
@@ -138,10 +159,58 @@ class NewEvent extends React.Component {
                     </Item>
                 </Content>
                 <Item style={styles.submitItem}>
+                    <GooglePlacesAutocomplete
+                        placeholder="Search"
+                        minLength={2} // minimum length of text to search
+                        autoFocus={false}
+                        returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+                        listViewDisplayed="auto" // true/false/undefined
+                        fetchDetails={true}
+                        renderDescription={row => row.description} // custom description render
+                        onPress={(data, details = null) => {
+                            console.log(data.structured_formatting.main_text);
+                            console.log(details.geometry.location.lat);
+                            this.setState({locationName: data.structured_formatting.main_text ? data.structured_formatting.main_text : data.description, location: {lat: details.geometry.location.lat, lng: details.geometry.location.lng}})
+                        }}
+                        getDefaultValue={() => {
+                            return ''; // text input default value
+                        }}
+                        query={{
+                            // available options: https://developers.google.com/places/web-service/autocomplete
+                            key: 'AIzaSyD2B_5aZKSBkEGyEXJ-dpoBTJHZCpT0jEk',
+                            language: 'en', // language of the results
+                        }}
+                        styles={{
+                            description: {
+                            fontWeight: 'bold',
+                            },
+                            predefinedPlacesDescription: {
+                            color: '#1faadb',
+                            },
+                        }}
+                        nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+                        GoogleReverseGeocodingQuery={{
+                            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+                        }}
+                        GooglePlacesSearchQuery={{
+                            // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+                            rankby: 'distance',
+                            types: 'food',
+                        }}
+                        filterReverseGeocodingByTypes={[
+                            'locality',
+                            'administrative_area_level_3',
+                        ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+                        debounce={200}
+                        />
+                    </Item>
+                <Item style={styles.submitItem}>
                     <Button rounded style={styles.submitButton} onPress={this._submitToFirebase}>
                         <Text style={styles.submitButtonText}>Submit</Text>
                     </Button>
                 </Item>
+                
+                
             </Container>
         );
     }

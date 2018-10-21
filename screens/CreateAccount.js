@@ -65,8 +65,6 @@ class CreateAccountScreen extends React.Component {
     handleSignUp = () => {
         console.log('we enter the function');
         const { email, password } = this.state;
-        console.log(email);
-        console.log(password);
         this.props.navigation.navigate('ProfileCreation', {email: email, password: password});
     }
 
