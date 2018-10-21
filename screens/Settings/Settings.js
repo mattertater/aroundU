@@ -1,10 +1,11 @@
 import React from 'react';
 import {
     Text,
+    View,
     StyleSheet,
     AsyncStorage,
 } from 'react-native';
-import {Item, Button } from 'native-base';
+import {Item, Button, Icon} from 'native-base';
 import colors from '../../config/Colors.js'
 import firebase from '../../config/Firebase';
 
@@ -28,21 +29,33 @@ class Settings extends React.Component {
     
     render(){
         return(
+            <View style={styles.container}>
 
-            <Item style={styles.noUnderline}>
-                <Button rounded style={styles.logoutButton} onPress={this._signOutAsync.bind(this)}>
-                    <Text style={styles.logoutButtonText}>Log Out</Text>
+                <Item style={styles.noUnderline}>
+                    <Text style={{fontSize: 30, color: colors.white}}>Settings</Text>
+                </Item>
+
+                <Item style={styles.noUnderline}>
+                    <Button rounded style={styles.logoutButton} onPress={this._signOutAsync.bind(this)}>
+                        <Text style={styles.logoutButtonText}>Log Out</Text>
+                    </Button>
+                </Item>
+
+                <Button transparent style={styles.mapMenu} onPress={() => this.props.navigation.toggleDrawer()}>
+                    <Icon name='menu' style={{ width: 20, height: 20, color: colors.white }}/>
                 </Button>
-            </Item>
+            </View>
         );
     }
 }
     const styles = StyleSheet.create({
-    temp: {
+    container: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: 50,
+        backgroundColor: colors.blue,
+        borderBottomWidth: 0,
     },
     noUnderline: {
         borderColor: 'transparent',
@@ -54,11 +67,16 @@ class Settings extends React.Component {
         minWidth: 250,
     },
     logoutButton: {
-        marginTop: 20,
+        position: 'absolute',
+        bottom: 50,
         width: 150,
         justifyContent: 'center',
         backgroundColor: colors.yellow,
-        borderColor: 'transparent',
+    },
+    mapMenu: {
+        position: 'absolute',
+        left: 10,
+        top: 10,
     },
     });
 

@@ -39,7 +39,6 @@ class MapScreen extends React.Component {
         };
     }
 
-   
     componentDidMount() {
         this._getLocationAsync();
     }
@@ -70,10 +69,7 @@ class MapScreen extends React.Component {
             });
         });
             
-        
     };
-
-    
 
     _handleMapRegionChange = region => {
         this.setState({ region });
@@ -86,41 +82,35 @@ class MapScreen extends React.Component {
         }
         return (
             <Container>
-                <Header androidStatusBarColor="rgba(0,0,0,0.251)" style={{marginTop: Expo.Constants.statusBarHeight, elevation: 0}}>
-                    <Left>
-                        <Button transparent onPress={() => this.props.navigation.toggleDrawer()}>
-                            <Icon name='menu'/>
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>aroundU</Title>
-                    </Body>
-                </Header>
+
                 <View style={styles.container}>
                     <MapView
                         style={styles.map}
                         initialRegion={this.state.region}
                         onRegionChange={() => this._handleMapRegionChange.bind(this)}
-                        >
-                            {this.state.eventMarkers.map( marker => (
-                                <Marker
-                                    key={marker.title}
-                                    coordinate={{latitude: marker.region.latitude, longitude: marker.region.longitude}}
-                                    title={marker.title}
-                                    description={marker.description}
-                                    onPress={() => {this.setState({selectedName: marker.name, selectedCoordinate: marker.coordinate, selectedRating: marker.rating, selectedOpen: marker.open, selectedPrice: marker.price, selectedDescription: marker.description});this.setModalVisible(true);}}
-                                    >
-                                    <View>
-                                        <Icon name='md-pin' style={{color: '#030e2c', fontSize: 40,}}/>
-                                    </View>
-                                </Marker>
-                                
-                            ))}
-                    </MapView>
-                    <Fab style={{ backgroundColor: colors.yellow }} position="bottomRight" onPress={() => this.props.navigation.navigate('NewEvent')}>
+                        {this.state.eventMarkers.map( marker => (
+                            <Marker
+                                key={marker.title}
+                                coordinate={{latitude: marker.region.latitude, longitude: marker.region.longitude}}
+                                title={marker.title}
+                                description={marker.description}
+                                onPress={() => {this.setState({selectedName: marker.name, selectedCoordinate: marker.coordinate, selectedRating: marker.rating, selectedOpen: marker.open, selectedPrice: marker.price, selectedDescription: marker.description});this.setModalVisible(true);}}
+                                >
+                                <View>
+                                    <Icon name='md-pin' style={{color: '#030e2c', fontSize: 40,}}/>
+                                </View>
+                            </Marker>
+                        ))}
+                        mapPadding={{top: 0, left: Dimensions.get('window').width - 50, right: 0, bottom: 0}}
+                    />
+                    <Fab style={{ backgroundColor: colors.orange }} position="bottomRight" onPress={() => this.props.navigation.navigate('NewEvent')}>
                         <Icon name="add" />
                     </Fab>
                 </View>
+
+                <Button transparent style={styles.mapMenu} onPress={() => this.props.navigation.toggleDrawer()}>
+                    <Icon name='menu' style={{ width: 20, height: 20, color: colors.darkBlue }}/>
+                </Button>
             </Container>
         );
     }
@@ -129,7 +119,7 @@ class MapScreen extends React.Component {
 
 const Loading = () => (
     <View style={styles.container}>
-      <Text>Loading...</Text>
+        <Text>Loading...</Text>
     </View>
   );
 
@@ -138,6 +128,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    mapMenu: {
+        position: 'absolute',
+        left: 15,
+        top: 15,
     },
     map: {
         position: 'absolute',
