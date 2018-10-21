@@ -17,7 +17,7 @@ import Expo from 'expo'
 import { Ionicons } from '@expo/vector-icons';
 import getTheme from '../../native-base-theme/components';
 import Common from '../../native-base-theme/variables/commonColor';
-import {MapView, Permissions, Location} from 'expo';
+import {MapView, Marker, Permissions, Location} from 'expo';
 import { Container, StyleProvider, Header, Left, Button, Icon, Body, Title, Content, Item, Fab } from 'native-base';
 import colors from '../../config/Colors.js';
 import firebase from '../../config/Firebase';
@@ -30,6 +30,7 @@ class MapScreen extends React.Component {
         this.state = {
             loading: true,
             eventMarkers: [],
+            tappedMarkerData: {},
             region: {
                 latitude: null,
                 longitude: null,
@@ -42,6 +43,7 @@ class MapScreen extends React.Component {
    
     componentDidMount() {
         this._getLocationAsync();
+        this._setMarkers();
     }
 
     _getLocationAsync = async () => {
@@ -49,10 +51,12 @@ class MapScreen extends React.Component {
         if (status !== 'granted') {
             alert('permission not granted');
         }
-
-        var markers = [];
         let location = await Location.getCurrentPositionAsync({});
         this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922 * 0.50, longitudeDelta: 0.0421 * 0.50 }, loading: false });
+    };
+
+    _setMarkers = () => { 
+        var markers = [];
         firebase.database().ref('Events').orderByKey().on('value',function(database){
             database.forEach(function(event) {
                 var instance = event.val(); 
@@ -63,15 +67,14 @@ class MapScreen extends React.Component {
                     description: instance.description,
                     startTime: instance.startTime,
                     endTime: instance.endTime,
-                    region: {latitude: instance.location.lat, longitude: instance.location.lng, latitudeDelta: 0.0922 * 0.50, longitudeDelta: 0.0421 * 0.50},
+                    coordinate: {latitude: instance.location.lat, longitude: instance.location.lng, latitudeDelta: 0.0922 * 0.50, longitudeDelta: 0.0421 * 0.50},
                     locationName: instance.locationName,
                     submissionBy: instance.submissionBy,
                 });  
             });
         })
-            
-        
-    };
+        this.setState({eventMarkers: markers})
+    }
 
     
 
@@ -103,17 +106,17 @@ class MapScreen extends React.Component {
                         onRegionChange={() => this._handleMapRegionChange.bind(this)}
                         >
                             {this.state.eventMarkers.map( marker => (
-                                <Marker
+                                <MapView.Marker
                                     key={marker.title}
-                                    coordinate={{latitude: marker.region.latitude, longitude: marker.region.longitude}}
-                                    title={marker.title}
-                                    description={marker.description}
+                                    coordinate={{latitude: marker.coordinate.latitude, longitude: marker.coordinate.longitude}}
+                                    title={marker.title + ' at ' + marker.organization}
+                                    description={marker.description + ' from ' + marker.startTime + ' to ' + marker.endTime}
                                     onPress={() => this.setState({tappedMarkerData: marker})}
                                     >
                                     <View>
-                                        <Icon name='md-pin' style={{color: '#030e2c', fontSize: 40,}}/>
+                                        <Icon name='md-pin' style={{color: colors.yellow, fontSize: 40,}}/>
                                     </View>
-                                </Marker>
+                                </MapView.Marker>
                                 
                             ))}
                     </MapView>
