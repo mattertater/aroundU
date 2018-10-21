@@ -3,6 +3,8 @@ import { Root } from 'native-base';
 import AuthLoadingScreen from './components/Auth.js';
 
 import SignInScreen from './screens/SignIn.js';
+import CreateAccountScreen from './screens/CreateAccount.js';
+import ProfileCreationScreen from './screens/ProfileCreation.js';
 import MyMap from "./screens/Map/index.js";
 import { createStackNavigator, createSwitchNavigator, createDrawerNavigator } from 'react-navigation';
 
@@ -10,6 +12,7 @@ import { createStackNavigator, createSwitchNavigator, createDrawerNavigator } fr
 const SignUpStack = createStackNavigator({  // Sign up
   SignIn: SignInScreen,
   CreateAccount: CreateAccountScreen,
+  ProfileCreation: ProfileCreationScreen,
 });
 
 
@@ -19,7 +22,7 @@ const Switch = createSwitchNavigator({    // Switch between the two
     Map: MyMap,
   }, 
   {
-    initialRouteName: 'AuthLoading' 
+    initialRouteName: 'AuthLoading',
   }
 );
 

@@ -8,7 +8,10 @@ import {
     StyleSheet,
     Text,
     AsyncStorage,
+    KeyboardAvoidingView,
 } from 'react-native';
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import AuthLoadingScreen from '../components/Auth.js';
 import { Form, Label, Input, Item, Container, Content, Body, StyleProvider, Button, Toast } from 'native-base';
@@ -73,32 +76,33 @@ class SignInScreen extends React.Component {
         return(
             <Container>
                 <StatusBar barStyle="light-content" />
-                <View style={styles.container}>
-                    
-                    <Item style={styles.noUnderline}>
-                        <Image source={require('../assets/images/logo.png')} style={styles.loginLogo}></Image>
-                    </Item>
+                <KeyboardAvoidingView style={styles.container} behavior="position">
+                    <View style={{flex: 1, flexDirection: 'column', alignItems: 'center',}}>
+                        <Item style={styles.noUnderline}>
+                            <Image source={require('../assets/images/logo.png')} style={styles.loginLogo}></Image>
+                        </Item>
 
-                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Email' placeholderTextColor='white' value={this.state.email} onChangeText={email => this.setState({email})}/>
-                    </Item>
-                    
-                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Password' placeholderTextColor='white' secureTextEntry={true} value={this.state.password} onChangeText={password => this.setState({password})}/>
-                    </Item>
+                        <Item style={[styles.loginTextBox, styles.noUnderline]}>
+                            <Input style={styles.loginText} placeholder='Email' placeholderTextColor='white' value={this.state.email} onChangeText={email => this.setState({email})}/>
+                        </Item>
 
-                    <Item style={styles.noUnderline}>
-                        <Button rounded style={styles.loginButton} onPress={this._signInAsync.bind(this)}>
-                            <Text style={styles.loginButtonText}>Log In</Text>
-                        </Button>
-                    </Item>
+                        <Item style={[styles.loginTextBox, styles.noUnderline]}>
+                            <Input style={styles.loginText} placeholder='Password' placeholderTextColor='white' secureTextEntry={true} value={this.state.password} onChangeText={password => this.setState({password})}/>
+                        </Item>
 
-                    <Item style={styles.noUnderline}>
-                        <Button onPress={() => {this.props.navigation.navigate('CreateAccount')}} rounded style={styles.loginButton}>
-                            <Text style={styles.loginButtonText}>Create Account</Text>
-                        </Button>
-                    </Item>
-                </View>
+                        <Item style={styles.noUnderline}>
+                            <Button rounded style={styles.loginButton} onPress={this._signInAsync.bind(this)}>
+                                <Text style={styles.loginButtonText}>Log In</Text>
+                            </Button>
+                        </Item>
+
+                        <Item style={styles.noUnderline}>
+                            <Button onPress={() => {this.props.navigation.navigate('CreateAccount')}} rounded style={styles.loginButton}>
+                                <Text style={styles.loginButtonText}>Create Account</Text>
+                            </Button>
+                        </Item>
+                    </View>
+                </KeyboardAvoidingView>
             </Container>
         );
     }
@@ -111,7 +115,7 @@ class SignInScreen extends React.Component {
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
-        paddingTop: 100,
+        paddingTop: 50,
         backgroundColor: colors.blue,
         borderBottomWidth: 0,
     },
@@ -130,7 +134,10 @@ class SignInScreen extends React.Component {
         color: colors.black,
     },
     loginTextBox: {
-        minWidth: 250,
+        minWidth: 300,
+        margin: 10,
+        borderRadius: 5,
+        backgroundColor: colors.darkBlue,
     },
     loginText: {
         color: colors.white,

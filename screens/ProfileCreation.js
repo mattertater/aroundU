@@ -10,6 +10,8 @@ import {
     AsyncStorage,
 } from 'react-native';
 
+import { ImagePicker } from 'expo';
+
 import AuthLoadingScreen from '../components/Auth.js';
 import { Form, Label, Input, Item, Container, Content, Body, StyleProvider, Button, Toast, Icon } from 'native-base';
 import Common from '../native-base-theme/variables/commonColor';
@@ -17,7 +19,7 @@ import getTheme from '../native-base-theme/components';
 // import firebase from '../config/Firebase.js'
 import colors from '../config/Colors.js'
 
-class CreateAccountScreen extends React.Component {
+class ProfileCreationScreen extends React.Component {
 
     constructor(props) {
         super(props);
@@ -42,9 +44,9 @@ class CreateAccountScreen extends React.Component {
             'Roboto': require('../node_modules/native-base/Fonts/Roboto.ttf'),
             'Roboto_medium': require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
         });
-        this.setState({isFontReady:true});
+        this.setState({isFontReady:true})
       }
-    
+
     // _signInAsync = async () => {
     // const { email, password } = this.state;
     // firebase.auth().signInWithEmailAndPassword(email, password)
@@ -66,7 +68,19 @@ class CreateAccountScreen extends React.Component {
     //                     });
     // };
 
+    _pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [1, 1],
+        });
+
+        if (!result.cancelled) {
+            this.setState({ image: result.uri });
+        }
+    };
+
     render(){
+        let { image } = this.state;
         if (!this.state.isFontReady) {
             return <Expo.AppLoading />;
         }
@@ -76,29 +90,39 @@ class CreateAccountScreen extends React.Component {
                 <View style={styles.container}>
 
                     <Button transparent style={styles.backButton} onPress={() => this.props.navigation.goBack(null)}>
-                        <Icon type='MaterialIcons' name='arrow-back' style={{ color: colors.white, padding: 0, margin: 0 }}/>
+                        <Icon type='MaterialIcons' name='arrow-back' style={{ color: colors.white }}/>
                     </Button>
 
-                    <Item style={[styles.createAccountTitleItem, styles.noUnderline]}>
-                        <Text style={styles.createAccountTitle}>Create New Account</Text>
-                    </Item>
-
-                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Email' placeholderTextColor='white'/>
-                    </Item>
-                    
-                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Password' placeholderTextColor='white' secureTextEntry={true} />
-                    </Item>
-
-                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Confirm Password' placeholderTextColor='white' secureTextEntry={true} />
+                    <Item style={styles.noUnderline}>
+                    {image ? (
+                        <Image source={{ uri: image }} style={[styles.profilePicture, { width: 200, height: 200, borderRadius: 100 }]} />
+                    ) : (
+                        <Image source={require('../assets/images/defaultProfilePicture.jpg')} style={[styles.profilePicture, { width: 200, height: 200, borderRadius: 100 }]} />     
+                    )}
                     </Item>
 
                     <Item style={styles.noUnderline}>
-                        <Button onPress={() => {this.props.navigation.navigate('ProfileCreation')}} rounded style={styles.loginButton}>
-                            <Text style={[styles.loginButtonText, {paddingLeft: 10}]}>More Detail</Text>
-                            <Icon type='MaterialIcons' name='navigate-next' style={{ color: colors.blue }}/>
+                        <Button rounded style={styles.uploadButton} onPress={this._pickImage}>
+                            <Text style={styles.uploadButtonText}>Upload an image</Text>
+                            <Icon type='MaterialIcons' name='add-a-photo' style={{ color: colors.blue }}/>
+                        </Button>
+                    </Item>
+
+                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
+                        <Input style={styles.loginText} placeholder='First Name' placeholderTextColor='white'/>
+                    </Item>
+                    
+                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
+                        <Input style={styles.loginText} placeholder='Last Name' placeholderTextColor='white' />
+                    </Item>
+
+                    <Item style={[styles.loginTextBox, styles.noUnderline]}>
+                        <Input style={styles.loginText} placeholder='School' placeholderTextColor='white' />
+                    </Item>
+
+                    <Item style={styles.noUnderline}>
+                        <Button rounded style={styles.loginButton}>
+                            <Text style={styles.loginButtonText}>Finish</Text>
                         </Button>
                     </Item>
                 </View>
@@ -123,22 +147,24 @@ class CreateAccountScreen extends React.Component {
         left: 10,
         top: 10,
     },
-    loginLogo: {
-        maxWidth: 175,
-        minWidth: 100,
+    profilePicture: {
+        borderWidth: 5,
+        borderColor: colors.darkBlue,
+        marginBottom: 15,
     },
-    createAccountTitleItem: {
+    uploadButton: {
+        backgroundColor: colors.yellow,
         width: 200,
-        marginBottom: 10,
+        marginBottom: 35,
         justifyContent: 'center',
     },
-    createAccountTitle: {
-        fontSize: 20,
-        color: colors.white,
+    uploadButtonText: {
+        color: colors.black,
     },
     loginButton: {
         marginTop: 20,
         width: 150,
+        padding: -10,
         justifyContent: 'center',
         backgroundColor: colors.yellow,
         borderColor: 'transparent',
@@ -157,4 +183,4 @@ class CreateAccountScreen extends React.Component {
     }
   });
 
-  export default CreateAccountScreen;
+  export default ProfileCreationScreen;
