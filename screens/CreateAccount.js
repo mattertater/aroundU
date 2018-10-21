@@ -65,7 +65,7 @@ class CreateAccountScreen extends React.Component {
         firebase.auth().createUserWithEmailAndPassword(email.trim(),  password)
           .then(() => {
             console.log('success');
-            this.props.navigation.navigate('Map');
+            this.props.navigation.navigate('ProfileCreation');
           }).catch(error => {
             console.log(error.message); 
           });
