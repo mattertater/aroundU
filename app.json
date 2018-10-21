@@ -1,12 +1,12 @@
 {
   "expo": {
     "name": "aroundU",
-    "description": "This project is really great.",
+    "description": "See what university events are happening around U.",
     "slug": "aroundU",
     "privacy": "public",
     "sdkVersion": "30.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "androidStatusBarColor": "#334393",
@@ -17,7 +17,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#324376"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
