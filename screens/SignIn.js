@@ -31,7 +31,6 @@ class SignInScreen extends React.Component {
           password: '',
           success: '',
           showToast: false,
-          isFontReady:false,
         };
       }
 
@@ -40,19 +39,15 @@ class SignInScreen extends React.Component {
         headerMode: 'none',
     };
 
-    componentDidMount() {
-        Expo.Font.loadAsync({
-            'Roboto': require('../node_modules/native-base/Fonts/Roboto.ttf'),
-            'Roboto_medium': require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
-        });
-        this.setState({isFontReady:true})
-      }
+    
+      
 
     _signInAsync = async () => {
     const { email, password } = this.state;
+    console.log(email);
+    console.log(password);
     firebase.auth().signInWithEmailAndPassword(email, password)
-                    .then(() => { AsyncStorage.setItem('userToken', 'success');
-                                    this.props.navigation.navigate('AuthLoading'); 
+                    .then(() => { console.log('User Logged in');
                                 })
                     .catch(() => {
                         <AuthLoadingScreen error='Authentication failed' loading={false} success=''/>
@@ -69,10 +64,9 @@ class SignInScreen extends React.Component {
                         });
     };
 
+    
+
     render(){
-        if (!this.state.isFontReady) {
-            return <Expo.AppLoading />;
-          } 
         return(
             <Container>
                 <StatusBar barStyle="light-content" />

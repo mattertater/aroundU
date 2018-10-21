@@ -20,7 +20,7 @@ import Common from '../../native-base-theme/variables/commonColor';
 import {MapView, Permissions, Location} from 'expo';
 import { Container, StyleProvider, Header, Left, Button, Icon, Body, Title, Content, Item, Fab } from 'native-base';
 import colors from '../../config/Colors.js';
-
+import firebase from '../../config/Firebase';
 
 
 class MapScreen extends React.Component {
@@ -29,6 +29,7 @@ class MapScreen extends React.Component {
         super(props);
         this.state = {
             loading: true,
+            eventMarkers: [],
             region: {
                 latitude: null,
                 longitude: null,
@@ -48,8 +49,26 @@ class MapScreen extends React.Component {
             alert('permission not granted');
         }
 
+        var markers = [];
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 }, loading: false });
+        console.log(JSON.stringify(location))
+        this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922 * 0.40, longitudeDelta: 0.0421 * 0.40 }, loading: false });
+        firebase.database().ref('Events').orderByKey().on('value',function(database){
+            database.forEach(function(event) {
+                var instance = event.val(); 
+                markers.push({
+                    title: instance.title,
+                    organization: instance.organization, 
+                    description: instance.description,
+                    startTime: instance.startTime,
+                    endTime: instance.endTime,
+                    region: {latitude: instance.location.lat, longitude: instance.location.lng, latitudeDelta: 0.0922 * 0.40, longitudeDelta: 0.0421 * 0.40},
+                    locationName: instance.locationName,
+                    submissionBy: instance.submissionBy,
+                });  
+            });
+        });
+            
     };
 
     _handleMapRegionChange = region => {
@@ -69,8 +88,21 @@ class MapScreen extends React.Component {
                         style={styles.map}
                         initialRegion={this.state.region}
                         onRegionChange={() => this._handleMapRegionChange.bind(this)}
+                        {this.state.eventMarkers.map( marker => (
+                            <Marker
+                                key={marker.title}
+                                coordinate={{latitude: marker.region.latitude, longitude: marker.region.longitude}}
+                                title={marker.title}
+                                description={marker.description}
+                                onPress={() => {this.setState({selectedName: marker.name, selectedCoordinate: marker.coordinate, selectedRating: marker.rating, selectedOpen: marker.open, selectedPrice: marker.price, selectedDescription: marker.description});this.setModalVisible(true);}}
+                                >
+                                <View>
+                                    <Icon name='md-pin' style={{color: '#030e2c', fontSize: 40,}}/>
+                                </View>
+                            </Marker>
+                        ))}
                         mapPadding={{top: 0, left: Dimensions.get('window').width - 50, right: 0, bottom: 0}}
-                        />
+                    />
                     <Fab style={{ backgroundColor: colors.orange }} position="bottomRight" onPress={() => this.props.navigation.navigate('NewEvent')}>
                         <Icon name="add" />
                     </Fab>

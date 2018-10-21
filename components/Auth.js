@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
+import firebase from '../config/Firebase.js'
 
 class AuthLoadingScreen extends React.Component {
 
@@ -36,6 +37,19 @@ class AuthLoadingScreen extends React.Component {
         console.log('error loading icon fonts', error);
       }
     }
+
+    componentDidMount() {
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            AsyncStorage.setItem('userToken', 'success');
+            this.props.navigation.navigate('AuthLoading'); 
+          } else {
+            console.log('no token');
+          }
+            
+            
+          })
+      }
     
   
     render() {

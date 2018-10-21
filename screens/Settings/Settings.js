@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import {Item, Button, Icon} from 'native-base';
 import colors from '../../config/Colors.js'
+import firebase from '../../config/Firebase';
 
-``
 class Settings extends React.Component {
 
     constructor(props) {
@@ -18,8 +18,13 @@ class Settings extends React.Component {
     }
 
     _signOutAsync = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('SignIn');
+        firebase.auth().signOut().then( () => {
+             AsyncStorage.clear().then(async () => {
+                this.props.navigation.navigate('SignIn');
+            })
+          }).catch(function(error) {
+            console.log(error);
+          });
     };
     
     render(){
