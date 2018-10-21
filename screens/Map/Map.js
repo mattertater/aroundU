@@ -18,7 +18,8 @@ import { Ionicons } from '@expo/vector-icons';
 import getTheme from '../../native-base-theme/components';
 import Common from '../../native-base-theme/variables/commonColor';
 import {MapView, Permissions, Location} from 'expo';
-import { Container, StyleProvider, Header, Left, Button, Icon, Body, Title, Content, } from 'native-base';
+import { Container, StyleProvider, Header, Left, Button, Icon, Body, Title, Content, Item, Fab } from 'native-base';
+import colors from '../../config/Colors.js';
 
 
 
@@ -60,6 +61,10 @@ class MapScreen extends React.Component {
     };
 
     render() {
+        if(this.state.loading)
+        {
+            return <Loading/>;
+        }
         return (
             <Container>
                 <Header androidStatusBarColor="rgba(0,0,0,0.251)" style={{marginTop: Expo.Constants.statusBarHeight, elevation: 0}}>
@@ -73,21 +78,16 @@ class MapScreen extends React.Component {
                     </Body>
                 </Header>
                 <View style={styles.container}>
-                    {this.state.loading ? (
-                        <Loading />
-                    ) : (
-                        <MapView
-                            style={styles.map}
-                            initialRegion={this.state.region}
-                            onRegionChange={() => this._handleMapRegionChange.bind(this)}
-                            >
-                        </MapView>
-                    )}
+                    <MapView
+                        style={styles.map}
+                        initialRegion={this.state.region}
+                        onRegionChange={() => this._handleMapRegionChange.bind(this)}
+                        >
+                    </MapView>
+                    <Fab style={{ backgroundColor: colors.yellow }} position="bottomRight" onPress={() => this.props.navigation.navigate('NewEvent')}>
+                        <Icon name="add" />
+                    </Fab>
                 </View>
-                
-                    
-                
-                
             </Container>
         );
     }
@@ -113,7 +113,15 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
     },
-
+    addEventButton: {
+        marginTop: 20,
+        width: 60,
+        height: 60,
+        borderRadius: 60/2,
+        justifyContent: 'center',
+        backgroundColor: colors.yellow,
+        borderColor: 'transparent',
+    }
 });
 
 export default MapScreen;

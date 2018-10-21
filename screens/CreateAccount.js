@@ -14,7 +14,7 @@ import AuthLoadingScreen from '../components/Auth.js';
 import { Form, Label, Input, Item, Container, Content, Body, StyleProvider, Button, Toast } from 'native-base';
 import Common from '../native-base-theme/variables/commonColor';
 import getTheme from '../native-base-theme/components';
-// import firebase from '../config/Firebase.js'
+import firebase from '../config/Firebase.js'
 import colors from '../config/Colors.js'
 
 class SignInScreen extends React.Component {
@@ -26,9 +26,9 @@ class SignInScreen extends React.Component {
           error: '',
           email: '',
           password: '',
+          confirmPassword: '',
           success: '',
           showToast: false,
-          isFontReady:true,
         };
       }
 
@@ -36,40 +36,42 @@ class SignInScreen extends React.Component {
         header: null,
         headerMode: 'none',
     };
-    
-    componentDidMount() {
-        Expo.Font.loadAsync({
-            'Roboto': require('../node_modules/native-base/Fonts/Roboto.ttf'),
-            'Roboto_medium': require('../node_modules/native-base/Fonts/Roboto_medium.ttf'),
-        });
-        this.setState({isFontReady:true})
-      }
 
-    // _signInAsync = async () => {
-    // const { email, password } = this.state;
-    // firebase.auth().signInWithEmailAndPassword(email, password)
-    //                 .then(() => { AsyncStorage.setItem('userToken', 'success');
-    //                                 this.props.navigation.navigate('AuthLoading'); 
-    //                             })
-    //                 .catch(() => {
-    //                     <AuthLoadingScreen error='Authentication failed' loading={false} success=''/>
-    //                     Toast.show({
-    //                         style: {
-    //                             backgroundColor: "#6D6ABF",
-    //                             borderRadius: 15,
-    //                         },
-    //                         text: "Email or password is inccorect. Try again.",
-    //                         buttonText: "Got it",
-    //                         duration: 3000,
-    //                         position: 'bottom',
-    //                     })
-    //                     });
-    // };
+    verifyValidCredentials = () => {
+        console.log('validating credentials');
+        const { email, password, confirmPassword } = this.state;
+        if(password.length > 5 && password === confirmPassword){
+            this.setState({email:email, password: password, confirmPassword: confirmPassword});
+            console.log('credentials are valid');
+            this.handleSignUp();
+        }
+        else{
+            Toast.show({
+                style: {
+                    backgroundColor: "#000000",
+                    borderRadius: 15,
+                },
+                text: "Email or password is inccorect. Try again.",
+                buttonText: "Got it",
+                duration: 3000,
+                position: 'bottom',
+            })
+        }
+    }
+
+    handleSignUp = () => {
+        console.log('handling sign up');
+        const { email, password } = this.state;
+        firebase.auth().createUserWithEmailAndPassword(email.trim(),  password)
+          .then(() => {
+            console.log('success');
+            this.props.navigation.navigate('Map');
+          }).catch(error => {
+            console.log(error.message); 
+          });
+    }
 
     render(){
-        if (!this.state.isFontReady) {
-            return <Expo.AppLoading />;
-          } 
         return(
             <Container>
                 <StatusBar barStyle="light-content" />
@@ -77,19 +79,19 @@ class SignInScreen extends React.Component {
                     
 
                     <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Email' placeholderTextColor='white'/>
+                        <Input style={styles.loginText} placeholder='Email' placeholderTextColor='white' value={this.state.email} onChangeText={email => this.setState({email})}/>
                     </Item>
                     
                     <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Password' placeholderTextColor='white' secureTextEntry={true} />
+                        <Input style={styles.loginText} placeholder='Password' placeholderTextColor='white' secureTextEntry={true} value={this.state.password} onChangeText={password => this.setState({password})}/>
                     </Item>
 
                     <Item style={[styles.loginTextBox, styles.noUnderline]}>
-                        <Input style={styles.loginText} placeholder='Confirm Password' placeholderTextColor='white' secureTextEntry={true} />
+                        <Input style={styles.loginText} placeholder='Confirm Password' placeholderTextColor='white' secureTextEntry={true} value={this.state.confirmPassword} onChangeText={confirmPassword => this.setState({confirmPassword})}/>
                     </Item>
 
                     <Item style={styles.noUnderline}>
-                        <Button rounded style={styles.loginButton}>
+                        <Button rounded style={styles.loginButton} onPress={() => this.verifyValidCredentials()}>
                             <Text style={styles.loginButtonText}>Sign Up</Text>
                         </Button>
                     </Item>
