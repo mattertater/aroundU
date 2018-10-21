@@ -52,23 +52,23 @@ class MapScreen extends React.Component {
 
         var markers = [];
         let location = await Location.getCurrentPositionAsync({});
-        console.log(JSON.stringify(location))
-        this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922 * 0.40, longitudeDelta: 0.0421 * 0.40 }, loading: false });
+        this.setState({ region:{ latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922 * 0.50, longitudeDelta: 0.0421 * 0.50 }, loading: false });
         firebase.database().ref('Events').orderByKey().on('value',function(database){
             database.forEach(function(event) {
                 var instance = event.val(); 
+                console.log(instance);
                 markers.push({
                     title: instance.title,
                     organization: instance.organization, 
                     description: instance.description,
                     startTime: instance.startTime,
                     endTime: instance.endTime,
-                    region: {latitude: instance.location.lat, longitude: instance.location.lng, latitudeDelta: 0.0922 * 0.40, longitudeDelta: 0.0421 * 0.40},
+                    region: {latitude: instance.location.lat, longitude: instance.location.lng, latitudeDelta: 0.0922 * 0.50, longitudeDelta: 0.0421 * 0.50},
                     locationName: instance.locationName,
                     submissionBy: instance.submissionBy,
                 });  
             });
-        });
+        })
             
         
     };
@@ -108,7 +108,7 @@ class MapScreen extends React.Component {
                                     coordinate={{latitude: marker.region.latitude, longitude: marker.region.longitude}}
                                     title={marker.title}
                                     description={marker.description}
-                                    onPress={() => {this.setState({selectedName: marker.name, selectedCoordinate: marker.coordinate, selectedRating: marker.rating, selectedOpen: marker.open, selectedPrice: marker.price, selectedDescription: marker.description});this.setModalVisible(true);}}
+                                    onPress={() => this.setState({tappedMarkerData: marker})}
                                     >
                                     <View>
                                         <Icon name='md-pin' style={{color: '#030e2c', fontSize: 40,}}/>
