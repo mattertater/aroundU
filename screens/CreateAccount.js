@@ -37,11 +37,13 @@ class CreateAccountScreen extends React.Component {
         headerMode: 'none',
     };
 
-    verifyValidCredentials = () => {
-        console.log('validating credentials');
+    _verifyValidCredentials = async () => {
         const { email, password, confirmPassword } = this.state;
+        console.log('validating credentials');
+        console.log('email ' + email);
+        console.log('password' + password);
+        console.log('confirmPassword' + confirmPassword);
         if(password.length > 5 && password === confirmPassword){
-            this.setState({email:email, password: password, confirmPassword: confirmPassword});
             console.log('credentials are valid');
             this.handleSignUp();
         }
@@ -56,19 +58,16 @@ class CreateAccountScreen extends React.Component {
                 duration: 3000,
                 position: 'bottom',
             })
+            
         }
-    }
+    };
 
     handleSignUp = () => {
-        console.log('handling sign up');
+        console.log('we enter the function');
         const { email, password } = this.state;
-        firebase.auth().createUserWithEmailAndPassword(email.trim(),  password)
-          .then(() => {
-            console.log('success');
-            this.props.navigation.navigate('ProfileCreation');
-          }).catch(error => {
-            console.log(error.message); 
-          });
+        console.log(email);
+        console.log(password);
+        this.props.navigation.navigate('ProfileCreation', {email: email, password: password});
     }
 
     render(){
@@ -98,7 +97,7 @@ class CreateAccountScreen extends React.Component {
                     </Item>
 
                     <Item style={styles.noUnderline}>
-                        <Button rounded style={styles.loginButton} onPress={() => this.verifyValidCredentials()}>
+                        <Button rounded style={styles.loginButton} onPress={this._verifyValidCredentials.bind(this)}>
                             <Text style={[styles.loginButtonText, {paddingLeft: 10}]}>More Detail</Text>
                             <Icon type='MaterialIcons' name='navigate-next' style={{ color: colors.blue }}/>
                         </Button>
