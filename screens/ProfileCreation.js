@@ -17,7 +17,7 @@ import { Form, Label, Input, Item, Container, Content, Body, StyleProvider, Butt
 import Common from '../native-base-theme/variables/commonColor';
 import getTheme from '../native-base-theme/components';
 // import firebase from '../config/Firebase.js'
-import colors from '../config/Colors.js'
+import colors from '../config/Colors.js';
 
 class ProfileCreationScreen extends React.Component {
 
@@ -81,9 +81,6 @@ class ProfileCreationScreen extends React.Component {
 
     render(){
         let { image } = this.state;
-        if (!this.state.isFontReady) {
-            return <Expo.AppLoading />;
-        }
         return(
             <Container>
                 <StatusBar barStyle="light-content" />

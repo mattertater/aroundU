@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Text,
+    View,
     StyleSheet,
     AsyncStorage,
 } from 'react-native';
@@ -23,16 +24,25 @@ class Settings extends React.Component {
     
     render(){
         return(
-
-            <Item style={styles.noUnderline}>
-                <Button rounded style={styles.logoutButton} onPress={this._signOutAsync.bind(this)}>
-                    <Text style={styles.logoutButtonText}>Log Out</Text>
-                </Button>
-            </Item>
+            <View style={styles.container}>
+                <Item style={styles.noUnderline}>
+                    <Button rounded style={styles.logoutButton} onPress={this._signOutAsync.bind(this)}>
+                        <Text style={styles.logoutButtonText}>Log Out</Text>
+                    </Button>
+                </Item>
+            </View>
         );
     }
 }
     const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: 50,
+        backgroundColor: colors.blue,
+        borderBottomWidth: 0,
+    },
     temp: {
         flex: 1,
         flexDirection: 'column',

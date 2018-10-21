@@ -7,6 +7,7 @@ import Friends from "../Friends/Friends.js";
 import SideBar from "../SideBar/SideBar.js";
 import Settings from "../Settings/Settings.js";
 import NewEvent from "../NewEvent/NewEvent.js";
+import colors from '../../config/Colors.js';
 
 import { createDrawerNavigator } from 'react-navigation';
 
@@ -24,6 +25,12 @@ const HomeScreenRouter = createDrawerNavigator(
         intialRouteName: Map,
         contentComponent: props => <SideBar {...props} />,
         backBehavior: "initialRoute",
+        drawerBackgroundColor: colors.darkBlue,
+        contentOptions: {
+          activeTintColor: 'white',
+          activeBackgroundColor: colors.blue,
+          activeLabelStyle: { color: colors.white },
+        }
     }
   );
   export default HomeScreenRouter;
