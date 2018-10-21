@@ -1,7 +1,6 @@
 import React from 'react';
 import { Root } from 'native-base';
 import AuthLoadingScreen from './components/Auth.js';
-
 import SignInScreen from './screens/SignIn.js';
 import CreateAccountScreen from './screens/CreateAccount.js';
 import ProfileCreationScreen from './screens/ProfileCreation.js';
